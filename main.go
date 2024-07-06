@@ -7,8 +7,10 @@ import (
 
 func main() {
 
-	var a = []int{0, 0, 1, 1, 1, 1, 2, 3, 3, 3}
-	removeDuplicates2(a)
+	var a = []int{1, 1, 1, 1, 1, 1}
+
+	fmt.Println(jump(a))
+
 }
 
 func merge(nums1 []int, m int, nums2 []int, n int) {
@@ -74,4 +76,85 @@ func removeDuplicates2(nums []int) int {
 	}
 	fmt.Println(nums)
 	return len(nums)
+}
+
+func majorityElement(nums []int) int {
+	var majorElement = nums[0]
+	var counter = 0
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == majorElement {
+			counter++
+		} else {
+			counter--
+		}
+		if counter == 0 {
+			majorElement = nums[i]
+			counter = 1
+		}
+
+	}
+	return majorElement
+
+}
+
+func rotate(nums []int, k int) {
+	fmt.Println(nums)
+	if k > len(nums) {
+		k = k % len(nums)
+	}
+	var nums2 = append(nums[len(nums)-k:], nums[:len(nums)-k]...)
+	copy(nums, nums2)
+	// for i := 0; i < len(nums2); i++ {
+	// 	nums[i] = nums2[i]
+	// }
+}
+
+func maxProfit(prices []int) int {
+	var profit = 0
+	for i := 0; i < len(prices)-1; i++ {
+		if prices[i] < prices[i+1] {
+			profit += prices[i+1] - prices[i]
+		}
+	}
+	return profit
+}
+
+func canJump(nums []int) bool {
+	if len(nums) == 1 {
+		return true
+	}
+
+	var buff = nums[0]
+	for i := 0; i < len(nums); i++ {
+		if i == len(nums)-1 {
+			return true
+		}
+		buff = max(buff, nums[i])
+		if buff == 0 {
+			return false
+		}
+		buff--
+	}
+	return true
+}
+
+func jump(nums []int) int {
+	if len(nums) == 1 {
+		return 0
+	}
+	var minJumps = 1
+	var buffJumpCounter = nums[0]
+	var maxNextJump = nums[0]
+
+	for i := 1; i < len(nums)-1; i++ {
+		buffJumpCounter--
+		maxNextJump--
+		maxNextJump = max(maxNextJump, nums[i])
+		if buffJumpCounter == 0 {
+			minJumps++
+			buffJumpCounter = maxNextJump
+		}
+
+	}
+	return minJumps
 }
